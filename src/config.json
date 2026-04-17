@@ -75,6 +75,4 @@
   "//": "Only export pin area in LEF (without any connected nets)",
   "MAGIC_WRITE_LEF_PINONLY": 1,
 
-  "WRITE_SDF": 1,
-  "STA_WRITE_SDF" : 1
 }
