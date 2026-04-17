@@ -5,7 +5,7 @@
 
 `default_nettype none
 
-module tt_um_example (
+module tdc_top (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -22,6 +22,33 @@ module tt_um_example (
   assign uio_oe  = 0;
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
+  wire _unused = &{ena, 1'b0};
+
+
+  localparam TDC_SIZE = 4;
+
+  wire [TDC_SIZE:0]   l_delay_stages; 
+  wire [TDC_SIZE-1:0] l_internal_delay; 
+  reg  [TDC_SIZE-1:0] l_captured_signal;
+
+  assign l_delay_stages[0] = ui_in[0];
+
+  genvar i;
+  generate
+    for (i=0; i< TDC_SIZE; i=i+1) begin
+      sky130_fd_sc_hd__inv_2 dly_stg1 (.A(l_delay_stages[i]),.Y(l_internal_delay[i]));
+      sky130_fd_sc_hd__inv_2 dly_stg2 (.A(l_internal_delay[i]),.Y(l_delay_stages[i+1]));
+    end
+  endgenerate
+
+  always @(posedge clk) begin
+    if(!rst_n) begin
+      l_captured_signal <= 0;
+    end else begin
+      l_captured_signal <= l_delay_stages[TDC_SIZE:1];
+    end
+  end
+
+  assign uo_out = {4'd0, l_captured_signal};
 
 endmodule
