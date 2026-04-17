@@ -36,8 +36,8 @@ module tt_um_tdc_top (
   genvar i;
   generate
     for (i=0; i< TDC_SIZE; i=i+1) begin
-      sky130_fd_sc_hd__inv_2 dly_stg1 (.A(l_delay_stages[i]),.Y(l_internal_delay[i]));
-      sky130_fd_sc_hd__inv_2 dly_stg2 (.A(l_internal_delay[i]),.Y(l_delay_stages[i+1]));
+      sky130_fd_sc_hd__inv_2 dly1 ( .A(l_delay_stages[i]),   .Y(l_internal_delay[i]) );
+      sky130_fd_sc_hd__inv_2 dly2 ( .A(l_internal_delay[i]), .Y(l_delay_stages[i+1]) );
     end
   endgenerate
 
