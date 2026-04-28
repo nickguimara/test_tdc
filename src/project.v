@@ -17,7 +17,6 @@ module tt_um_tdc_top (
 );
 
   // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
   assign uio_out = 0;
   assign uio_oe  = 0;
 
@@ -25,7 +24,7 @@ module tt_um_tdc_top (
   wire _unused = &{ena, 1'b0};
 
 
-  localparam TDC_SIZE = 511;
+  localparam TDC_SIZE = 512;
 
   wire [TDC_SIZE:0]   l_delay_stages; 
   wire [TDC_SIZE-1:0] l_internal_delay; 
@@ -49,6 +48,12 @@ module tt_um_tdc_top (
     end
   end
 
-  assign uo_out = ^l_delay_stages;
+integer j;
+always @* begin
+  for (j=1; j< TDC_SIZE; j=j+1) begin
+    if (l_captured_signal[j-1] && !l_captured_signal[j])
+      uo_out = j;
+  end
+end
 
 endmodule
