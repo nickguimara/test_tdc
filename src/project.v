@@ -24,7 +24,7 @@ module tt_um_tdc_top (
   wire _unused = &{ena, 1'b0};
 
 
-  localparam TDC_SIZE = 512;
+  localparam TDC_SIZE = 256;
 
   wire [TDC_SIZE:0]   l_delay_stages; 
   wire [TDC_SIZE-1:0] l_internal_delay; 
