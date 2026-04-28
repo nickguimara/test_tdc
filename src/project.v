@@ -49,11 +49,14 @@ module tt_um_tdc_top (
   end
 
 integer j;
+reg [7:0] l_uo_out;
 always @* begin
   for (j=1; j< TDC_SIZE; j=j+1) begin
     if (l_captured_signal[j-1] && !l_captured_signal[j])
-      uo_out = j;
+      l_uo_out = j;
   end
 end
+
+assign uo_out = l_uo_out;
 
 endmodule
